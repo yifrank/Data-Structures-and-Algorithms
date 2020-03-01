@@ -1,0 +1,131 @@
+#include <iostream>
+using namespace std;
+typedef int Elemtype;
+struct Triple
+{
+	int row,col;
+	Elemtype date;
+};
+struct SMaxtrix
+{
+	int h,l,g;
+	Triple sm[7];
+};
+void initmatrix(SMaxtrix &k)
+{
+	k.h=0;
+	k.l=0;
+	k.g=0; 
+}
+void inmaxxtrix(SMaxtrix &k,int h,int l,int g)
+{
+	k.h=h;
+	k.l=l;
+	k.g=g;
+	int row,col,date,i;
+		for(i=1;i<=k.g;i++)
+		{
+			cin>>row>>col>>date;
+			k.sm[i].row=row;
+			k.sm[i].col=col;
+			k.sm[i].date=date;
+
+		}
+}
+SMaxtrix zhuanzhi1(SMaxtrix &k)
+{
+	int i,a,s=1;
+	SMaxtrix S;
+    initmatrix(S);
+	int m,n,t;
+	m=k.h;
+	n=k.l;
+	t=k.g;
+	S.h=m;
+	S.l=n;
+	S.g=t;
+	for(a=1;a<=k.l;a++)
+    {
+    	for(i=1;i<=k.g;i++)
+		{
+			if(k.sm[i].col==a)
+			{
+			S.sm[s].row=a;
+			S.sm[s].col=k.sm[i].row;
+			S.sm[s].date=k.sm[i].date;
+			s++;
+			}
+		}
+	
+	}
+return S;
+
+}
+SMaxtrix zhuanzhi2(SMaxtrix &k)
+{
+	SMaxtrix S;
+    initmatrix(S);
+	int m,n,t;
+	m=k.h;
+	n=k.l;
+	t=k.g;
+	S.h=m;
+	S.l=n;
+	S.g=t;
+	int *num=new int [n+1];
+	int *pot=new int [n+1];
+	int col,i;
+	for(col=1;col<=n;col++)
+		num[col]=0;
+		for(i=1;i<=t;i++)
+		{
+			int j=k.sm[i].col;
+			num[j]++;
+		}
+		pot[1]=1;
+		for(col=2;col<=n;col++)
+		{
+			pot[col]=pot[col-1]+num[col-1];
+		}
+		for(i=1;i<=t;i++)
+		{
+			int j=k.sm[i].col;
+			int q=pot[j];
+			S.sm[q].row=j;
+			S.sm[q].col=k.sm[i].row;
+			S.sm[q].date=k.sm[i].date;
+			pot[j]++;
+		}
+		delete [] num;
+		delete [] pot;
+		return S;
+}
+void outmaxtrix(SMaxtrix &k)
+{
+	cout<<"(";
+	for(int i=1;i<k.g;i++)
+	{
+		cout<<"("<<k.sm[i].row<<",";
+		cout<<k.sm[i].col<<",";
+		cout<<k.sm[i].date<<")"<<", ";
+	}
+	if(k.g!=0)
+	{
+	    cout<<"("<<k.sm[k.g].row<<",";
+		cout<<k.sm[k.g].col<<",";
+		cout<<k.sm[k.g].date<<")"<<", ";
+	}
+	cout<<")"<<endl;
+}
+int main()
+{
+	SMaxtrix k,S,f;
+    initmatrix(k);
+	inmaxxtrix(k,5,6,4);
+	outmaxtrix(k);
+	f=zhuanzhi1(k);
+	outmaxtrix(f);
+	S=zhuanzhi2(k);
+	outmaxtrix(S);	
+	return 0;
+}
