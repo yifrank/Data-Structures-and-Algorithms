@@ -1,0 +1,81 @@
+#include <iostream>
+using namespace std;
+struct tanzikun 
+{
+	char *stack;
+	int top;
+	int MaxSize;
+};
+void inittanzikun(tanzikun& L)
+{
+	L.MaxSize=6;
+    L.stack=new char [L.MaxSize];
+	if(!L.stack)
+	{
+		cerr<<"分配失败！"<<endl;
+		exit(1);
+	}
+	L.top=-1;
+}
+bool emptytanzikun(tanzikun& L)
+{
+	return (L.top==-1);
+}
+void push(tanzikun& L, char h)
+{ 
+	L.top++;
+	L.stack[L.top]=h;
+}
+char out(tanzikun& L)
+{
+	char e;
+	e=L.stack[L.top];
+	L.top--;
+	return e;
+}
+int geshu(tanzikun L)
+{
+	return (L.top+1);
+}
+void print(tanzikun L)
+{
+	int i;
+	for(i=L.top;i>=0;i--)
+	{
+		cout<<L.stack[i]<<" ";
+	}
+	cout<<endl;
+}
+void deletet(tanzikun& L)
+{
+	if(L.stack)
+	{
+		delete []L.stack;
+		L.stack=NULL;
+	}
+	L.top=-1;
+	L.MaxSize=0;
+}
+int main()
+{
+	tanzikun L;
+    inittanzikun(L);
+    push(L,'a');
+	push(L,'b');
+	push(L,'c');
+	cout<<"输出栈中元素："<<endl;
+	print(L);
+	cout<<"出栈一个元素："<<endl;
+    cout<<out(L)<<endl;
+	cout<<"元素的个数为："<<endl;
+	cout<<geshu(L)<<endl;
+    push(L,'d');
+	push(L,'e');
+	push(L,'f');
+	cout<<"元素的个数为："<<endl;
+	cout<<geshu(L)<<endl;
+	cout<<"输出栈中元素："<<endl;
+	print(L);
+    deletet(L);
+	return 0;
+}

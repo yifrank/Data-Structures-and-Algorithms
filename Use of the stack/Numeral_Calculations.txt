@@ -1,0 +1,239 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+struct Stack 
+{
+	char *stack;
+	int top;
+	int MaxSize;
+};
+void initStack(Stack& L)
+{
+	L.MaxSize=6;
+    L.stack=new char [L.MaxSize];
+	if(!L.stack)
+	{
+		cerr<<"分配失败！"<<endl;
+		exit(1);
+	}
+	L.top=-1;
+}
+bool emptyStack(Stack& L)
+{
+	return (L.top==-1);
+}
+void push(Stack& L, char h)
+{ 
+	L.top++;
+	L.stack[L.top]=h;
+}
+char out(Stack& L)
+{
+	char e;
+	e=L.stack[L.top];
+	L.top--;
+	return e;
+}
+char peek(Stack L)
+{
+	return(L.stack[L.top]);
+}
+int geshu(Stack L)
+{
+	return (L.top+1);
+}
+void print(Stack L)
+{
+	int i;
+	for(i=L.top;i>=0;i--)
+	{
+		cout<<L.stack[i]<<" ";
+	}
+	cout<<endl;
+}
+void deletet(Stack& L)
+{
+	if(L.stack)
+	{
+		delete []L.stack;
+		L.stack=NULL;
+	}
+	L.top=-1;
+	L.MaxSize=0;
+}
+int Precedence(char op)
+{
+	switch(op) 
+	{
+    case '+':
+	case '-':
+		return 1;
+	case '*':
+	case '/':
+		return 2;
+	case '(':
+	case '@':
+	default:
+		return 0;
+	}
+}
+void Change(char *S1,char *S2)
+{
+	Stack R;
+    initStack(R);
+	push(R,'@');
+	int i=0,j=0;
+	char ch=S1[i];
+	while(ch!='\0')
+	{
+		if(ch==' ') 
+			ch=S1[++i];
+		else if(ch=='(')
+		{
+			push(R,ch);
+			ch=S1[++i];
+		}
+		else if(ch==')')
+		{
+			while(peek(R)!='(') 
+				S2[j++]=out(R);
+		      out(R);
+			ch=S1[++i];
+		}
+		else if(ch=='+' || ch=='-' || ch=='*' || ch=='/')
+		{
+			char w=peek(R);
+			while(Precedence(w)>=Precedence(ch))
+			{
+				S2[j++]=w;
+				out(R);
+				w=peek(R);
+			}
+			push(R,ch);
+			ch=S1[++i];
+		}
+		else 
+		{ 
+			if((ch<'0' || ch>'9') && ch!='.')
+			{
+				cout<<"error!"<<endl;
+				exit(1);
+			}
+			while((ch>='0' && ch<='9') || ch=='.')
+			{
+				S2[j++]=ch;
+				ch=S1[++i];
+			}
+			S2[j++]=' ';
+		}
+	}
+	     ch=out(R);
+		while(ch!='@')
+		{
+			if(ch=='(')
+			{
+				cout<<"error!"<<endl;
+				exit(1);
+			}
+			else
+			{
+				S2[j++]=ch;
+				S2[j++]=' ';
+				ch=out(R);
+			}
+	}
+		S2[j++]='\0';
+}
+double Computer(char* str)
+{
+	Stack S;
+	initStack(S);
+	double x,y;
+	int i=0;
+	while(str[i])
+	{
+		if(str[i]==' ')
+		{
+			i++;
+			continue;
+		}
+		switch(str[i])
+		{
+		case '+':
+			x=out(S)+out(S);
+			i++;
+			break;
+		case '-':
+			x=out(S);
+			x=out(S)-x;
+			i++;
+			break;
+		case '*':
+			x=out(S)*out(S);
+			i++;
+			break;
+		case '/':
+			x=out(S);
+			if(x!=0.0)
+				x=out(S)/x;
+			else
+			{
+				cout<<"Divide by 0!"<<endl;
+				exit(1);
+			}
+			i++;
+			break;
+		default:
+	
+			x=0;
+			while(str[i]>=48 && str[i]<=57)
+			{
+				x=x*10+str[i]-48;
+				i++;
+			}
+			if(str[i]=='.')
+			{
+				i++;
+				y=0;
+				double j=10.0;
+				while(str[i]>=48 && str[i]<=57)
+				{
+					y=y+(str[i]-48)/j;
+					i++;
+					j*=10;
+				}
+				x+=y;
+			}
+		}
+		push(S,x);
+	}
+		if(emptyStack(S))
+		{
+			cout<<"stack is empty!"<<endl;
+			exit(1);
+		}
+		x=out(S);
+		if(emptyStack(S))
+		{
+			return x;
+		}
+		else 
+		{
+			cout<<"expression error!"<<endl;
+			exit(1);
+		}
+		deletet(S);
+	}
+
+void main()
+{
+	char a[30];
+	char b[30];
+	cout<<"请输入一个中缀算术表达式："<<endl;
+	cin.getline(a,sizeof(a));
+	Change(a,b);
+	cout<<"对应的后缀表达式为："<<endl;
+	cout<<b<<endl;
+	cout<<"计算结果为："<<endl;
+    cout<<Computer(b)<<endl;
+}

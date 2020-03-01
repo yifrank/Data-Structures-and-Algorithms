@@ -1,0 +1,168 @@
+#include <iostream>
+using namespace std;
+struct LNode
+{
+	char date;
+	LNode *next;
+};
+//循环链表的初始化
+void initlist(LNode* &HL)
+{
+	HL=NULL;
+}
+//尾插法添加元素
+void insertlist1(LNode* &HL,char a[],int n)
+{
+	LNode *p,*q;
+	int i;
+	p=HL;
+    for(i=1;i<n;i++)
+	{
+		q=new LNode;
+	    q->date=a[i];
+	    q->next=NULL;
+	    p->next=q;
+        p=q;
+	}
+	q->next=HL;
+}
+//遍历循环链表
+void printLNode(LNode* HL)
+{ 
+	LNode *p;
+	p=HL;
+	while(p->next!=HL)
+	{
+		putchar(p->date);
+		putchar(' ');
+		p=p->next;
+	}
+	if(p->next==HL)
+	{
+		putchar(p->date);
+	}
+	cout<<endl;
+}
+//求循环链表的长度
+int lengthlist(LNode* HL)
+{
+	LNode *p;
+	int i=1;
+	p=HL;
+	while(p->next!=HL)
+	{
+		i++;
+		p=p->next;
+	}
+	return i;
+}
+//判断循环链表是否为空
+bool emptylist(LNode* HL)
+{
+	if(HL->next==NULL)
+		return 0;
+	else
+		return 1;
+}
+//查找给定位置的值
+char findlist(LNode* HL,int a)
+{
+	LNode *p,*q;
+	int i;
+	p=HL;
+	q=p->next;
+	for(i=2;i<a;i++)
+	{
+		p=q->next;
+		q=p;
+	}
+	return (p->date);
+}
+//查找给定值的位置
+int poslist(LNode* HL,char item)
+{
+	LNode *p;
+	int i=1;
+	p=HL;
+	while(p->date!=item)
+	{
+		i++;
+		p=p->next;
+	}
+	return i;
+
+}
+//插入元素
+void insertlist2(LNode* &HL,char item,int a)
+{
+	LNode *p,*q,*f;
+	int i;
+    p=HL;
+	q=p->next;
+	for(i=2;i<a;i++)
+	{
+		p=q;
+		q=p->next;
+	}
+	f=new LNode;
+	f->date=item;
+    p->next=f;
+	f->next=q;
+}
+//删除元素
+void deltlist(LNode* &HL,int pos)
+{
+    LNode *p,*q;
+	int i;
+    p=HL;
+	q=p->next;
+	for(i=2;i<pos;i++)
+	{
+		p=q;
+		q=p->next;
+	}
+	p->next=q->next;
+	delete q;
+}
+//释放循环链表
+void clearlist(LNode* &HL)
+{
+	LNode *cp,*np;
+	cp=HL;
+	while(cp!=HL)
+	{
+		np=cp->next;
+		delete cp;
+		cp=np;
+	}
+	HL=NULL;
+}
+int main()
+{
+	LNode *HL;
+	char a[6]={'a','b','c','d','e'};
+	initlist(HL);
+	HL=new LNode;
+	HL->date=a[0];
+	HL->next=NULL;
+	insertlist1(HL,a,5);
+	cout<<"输出循环链表："<<endl;
+	printLNode(HL);	
+	cout<<"输出循环链表的长度："<<endl;
+    cout<<lengthlist(HL)<<endl;
+	cout<<"1为非空，0为空："<<endl;
+	cout<<emptylist(HL)<<endl;
+	cout<<"查找第三个元素为："<<endl;
+	cout<<findlist(HL,3)<<endl;
+	cout<<"查找‘a’的位置为："<<endl;
+	cout<<poslist(HL,'a')<<endl;
+	insertlist2(HL,'f',4);
+	cout<<"在第四个位置插入‘f’元素"<<endl;
+	printLNode(HL);
+	deltlist(HL,3);
+	cout<<"删除第三个元素"<<endl;
+    printLNode(HL);
+    clearlist(HL);
+	return 0;
+
+} 

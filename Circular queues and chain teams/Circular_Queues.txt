@@ -1,0 +1,69 @@
+#include <iostream>
+using namespace std;
+typedef  char Elemtype;
+struct tzk
+{
+	Elemtype *Tzk;
+	int front ,rear,len;
+	int Maxsize;
+};
+void inittzk(tzk& q)
+{
+	q.Maxsize=6;
+	q.Tzk=new Elemtype[q.Maxsize];
+	q.front=q.rear=0;
+	q.len=0;
+}
+bool emptytzk(tzk& q)
+{
+	return (q.len==0);
+}
+void intzk(tzk& q,Elemtype item)
+{
+	q.rear++;
+	q.Tzk[q.rear]=item;	
+    q.rear=(q.rear)%(q.Maxsize-1);
+	q.len++;
+}
+Elemtype outtzk(tzk& q)
+{
+	Elemtype e;
+	if(q.front==q.rear)
+		cout<<"error!"<<endl;
+	q.front++;
+	e=q.Tzk[q.front];	
+	q.Tzk[q.front]=NULL;
+	q.len=q.rear-q.front; 
+	return e;
+}
+int geshu(tzk& q)
+{
+	return (q.len);
+}
+void deletetzk(tzk& q)
+{
+	q.front=q.rear=0;
+	q.Maxsize=0;
+	delete []q.Tzk;
+	q.Tzk=NULL;
+}
+int main()
+{
+	tzk q;
+	inittzk(q);
+	cout<<"1为空，0为非空："<<endl;
+	cout<<emptytzk(q)<<endl;
+    intzk(q,'a');
+	intzk(q,'b');
+	intzk(q,'c');
+	cout<<"出队一个元素："<<endl;
+	cout<<outtzk(q)<<endl;
+	cout<<"输出队中的元素个数："<<endl;
+    cout<<geshu(q)<<endl;
+	intzk(q,'d');
+	intzk(q,'e');
+	intzk(q,'f');
+	cout<<"输出队中的元素个数："<<endl;
+    cout<<geshu(q)<<endl;
+	return 0;
+}

@@ -1,0 +1,89 @@
+#include <iostream>
+using namespace std;
+struct LNode
+{
+	int date;
+	LNode *next;
+};
+//循环链表的初始化
+void initlist(LNode* &HL)
+{
+	HL=NULL;
+}
+//尾插法添加元素
+void insertlist1(LNode* &HL)
+{
+	LNode *p,*q;
+	int i,n;
+    cout<<"请输入n的值(n为总人数)："<<endl;
+	cin>>n;
+	p=HL;
+    for(i=2;i<=n;i++)
+	{
+		q=new LNode;
+	    q->date=i;
+	    q->next=NULL;
+	    p->next=q;
+        p=q;
+	}
+	q->next=HL;
+}
+//删除元素
+void deltlist(LNode* &HL)
+{
+    LNode *p,*q;
+	int i=2,n,s;
+	cout<<"请输入m的值(数到m的出列)："<<endl;
+	cin>>n;
+    p=HL;
+	q=p->next;
+	for(s=0;s<100;s++)
+	{
+		if(p==q)
+		{
+			cout<<p->date<<endl;
+			break;
+		}
+		if(i==n)
+	{
+        p->next=q->next;
+		cout<<q->date<<' ';
+		delete q;
+      	q=p->next;
+		p=q;
+		q=p->next;
+		i=2;
+	}
+	else 
+	{
+		p=q;
+		q=p->next;
+		i++;
+	}
+	}
+}
+//移动头指正
+LNode *movelist(LNode* &HL)
+{
+	int a,i;
+	cout<<"请输入s的值(从第s个人开始第1次报数)："<<endl;
+	cin>>a;
+	for(i=1;i<a;i++)
+	{
+		HL=HL->next;
+	}
+	return HL;
+}
+int main()
+{
+	LNode *HL;
+	initlist(HL);
+	HL=new LNode;
+	HL->date=1;
+	HL->next=NULL;
+        insertlist1(HL);
+	movelist(HL);
+	deltlist(HL);
+	return 0;
+
+} 

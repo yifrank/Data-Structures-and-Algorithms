@@ -1,0 +1,86 @@
+#include <iostream>
+using namespace std;
+typedef  char Elemtype;
+struct Lnode
+{
+	Elemtype date;
+	Lnode *next;
+};
+Lnode *jianbiaolnode(Lnode* &q,Elemtype a[],int n)
+{
+	Lnode *p,*f,*rear;
+	f=q;
+	int i;
+	for(i=1;i<n;i++)
+	{
+		p=new Lnode;
+	    p->date=a[i];
+		p->next=NULL;
+		f->next=p;
+	    f=p;
+	}
+	p->next=q;
+	rear=p;
+	return rear;
+}
+Elemtype outlnode(Lnode* &l)
+{
+	Lnode *p;
+	Elemtype a;
+	p=l->next;
+	a=p->date;
+    l->next=p->next;
+	return a;
+}
+int geshu(Lnode* l)
+{
+	Lnode *p=l->next;
+	int s=1;
+	while(p!=l)
+	{
+		s++;
+		p=p->next;
+	}
+	return s;
+}
+void inlnode(Lnode*& l,Elemtype item)
+{
+	Lnode *p;
+	p=new Lnode;
+	p->date=item;
+	p->next=l->next;
+	l->next=p;
+	l=p;
+}
+void deletelnode(Lnode *&l)
+{
+	Lnode *p=l;
+	while(p->next!=l)
+	{
+		p->date=NULL;
+	}
+	l=NULL;
+}
+int main()
+{
+	Lnode *q,*rear;
+	int i;
+	Elemtype a[]={'a','b','c','d','e','f'};
+	q=new Lnode;
+	q->date=a[0];
+	q->next=NULL;
+	rear=jianbiaolnode(q,a,6);
+	cout<<"链队的元素为："<<endl;
+	for(i=0;i<6;i++)
+	cout<<a[i]<<" ";
+	cout<<endl;
+	cout<<"删除一个元素："<<endl;
+    cout<<outlnode(rear)<<endl;
+	cout<<"链队的元素个数为："<<endl;
+    cout<<geshu(rear)<<endl;
+    inlnode(rear,'g');
+	cout<<"插入元素g后链队的元素个数为："<<endl;
+	cout<<geshu(rear)<<endl;
+	deletelnode(rear);
+	return 0;
+}

@@ -1,0 +1,99 @@
+#include <iostream>
+using namespace std;
+typedef  char Elemtype;
+struct Lnode
+{
+	Elemtype date;
+	Lnode *next;
+};
+struct head
+{
+	Lnode *front;
+	Lnode *rear;
+};
+void inithead(head& q)
+{
+	q.front=q.rear=NULL;
+}
+bool empty(head q)
+{
+	return (q.rear==NULL);
+}
+void inlnode(head& q,Elemtype item)
+{
+	Lnode *p;
+	
+	p=new Lnode;
+	p->date=item;
+	p->next=NULL;
+	if(q.front->date==NULL)
+	{
+		q.front=p;
+	}
+	if(q.rear==NULL)
+	{
+		q.rear=p;
+	}
+	q.rear=q.rear->next=p;
+
+}
+Elemtype outlnode(head& q)
+{
+	Lnode *p;
+	Elemtype a;
+	p=q.front;
+	a=p->date;
+	q.front=q.front->next;
+	if(q.front==NULL)
+	{
+		cout<<"queue is empty!"<<endl;
+		exit(1);
+	}
+	delete p;
+	return a;
+}
+int geshu(head& q)
+{
+	Lnode *p;
+	int s=0;
+	p=q.front;
+	while(p!=NULL)
+	{
+      s++;
+	  p=p->next;
+	}
+	return s;
+}
+void deletelnode(head& q)
+{
+	Lnode *p=q.front;
+	while(p!=NULL)
+	{
+		q.front=q.front->next;
+		delete p;
+		p=q.front;
+	}
+	q.rear=NULL;
+}
+int main()
+{
+	head q;
+	inithead(q);
+	q.front=new Lnode;
+	q.front->date=NULL;
+	q.front->next=NULL;
+	cout<<"1 is empty,0 is not empty:"<<endl;
+    cout<<empty(q)<<endl;
+	inlnode(q,'a');
+	inlnode(q,'b');
+	inlnode(q,'c');
+	cout<<"out a lnode:"<<endl;
+	cout<<outlnode(q)<<endl;
+	cout<<"output this queue's geshu:"<<endl;
+    cout<<geshu(q)<<endl;
+	inlnode(q,'d');
+	inlnode(q,'e');
+	inlnode(q,'f');
+	cout<<"output this queue's geshu:"<<endl;
+    cout<<geshu(q)<<endl;
+}

@@ -1,0 +1,91 @@
+#include <iostream>
+using namespace std;
+struct tanzikun 
+{
+	char date;
+	tanzikun *next;
+};
+void inittanzikun(tanzikun*& HS)
+{
+	HS=NULL;
+}
+bool emptytanzikun(tanzikun* HS)
+{
+	return (HS==NULL);
+}
+void insert(tanzikun*& HS, char h)
+{ 
+	tanzikun *p;
+	p=new tanzikun;
+	p->date=h;
+	p->next=HS;
+	HS=p;
+}
+char out(tanzikun*& HS)
+{
+	char e;
+	tanzikun *p;
+	e=HS->date;
+	p=HS;
+	HS=HS->next;
+	delete p;
+	return e;
+}
+int geshu(tanzikun*& HS)
+{
+	int s=0;
+	tanzikun *p=HS;
+	while(p!=NULL)
+	{
+		s++;
+		p=p->next;
+	}
+	return s;
+}
+void print(tanzikun* HS)
+{
+	while(HS!=NULL)
+	{
+		cout<<HS->date<<" ";
+		HS=HS->next;
+	}
+	cout<<endl;
+}
+void deletet(tanzikun*& HS)
+{
+	tanzikun *cp,*np;
+	cp=HS;
+	while(cp!=NULL)
+	{
+		np=cp->next;
+		delete cp;
+		cp=np;
+	}
+	HS=NULL;
+}
+int main()
+{
+	tanzikun *HS;
+	HS=new tanzikun;
+	HS->date=NULL;
+	HS->next=NULL;
+    inittanzikun(HS);
+    insert(HS,'a');
+	insert(HS,'b');
+	insert(HS,'c');
+	cout<<"输出栈中元素："<<endl;
+	print(HS);
+	cout<<"出栈一个元素："<<endl;
+    cout<<out(HS)<<endl;
+	cout<<"元素的个数为："<<endl;
+	cout<<geshu(HS)<<endl;
+    insert(HS,'d');
+	insert(HS,'e');
+	insert(HS,'f');
+	cout<<"元素的个数为："<<endl;
+	cout<<geshu(HS)<<endl;
+	cout<<"输出栈中元素："<<endl;
+	print(HS);
+    deletet(HS);
+	return 0;
+}
